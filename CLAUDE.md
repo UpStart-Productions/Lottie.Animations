@@ -50,6 +50,11 @@ Both pitfalls are covered by verification step 9 above (render a late hold frame
 - Literal measured timing from the source often reads as too fast/mechanical once rebuilt — default to ~20-25% slower than the raw measured durations for anything with visible motion (holds can stay at measured length).
 - Double check any off-center compound shape (e.g. a checkmark inside a circle) against the true geometric center before calling it done — asymmetric shapes read as off-center more easily than expected.
 
+## Preview GIF pitfall: under-sampling makes a fine file look janky
+The `celebration-burst` GIF preview looked choppy on first delivery — like it was running at ~5fps — even though the delivered `.json` was the untouched original, correctly authored at its real frame rate (70fps). The cause was the preview capture, not the animation: sampling every 4th frame and then displaying each captured frame for a fixed 120ms threw away most of the motion for anything moving fast (confetti pieces spinning/streaming quickly), so consecutive preview frames showed large jumps instead of smooth motion.
+
+Fix: sample densely enough for the fastest motion in that specific animation (every 2nd frame is usually enough; drop to every frame for very fast/small motion), and set the GIF's per-frame duration to match real elapsed time (`step_frames / source_fr * 1000` ms), not a fixed guess like 120ms. Always sanity-check total GIF playback time against the source's real duration (`total_frames / fr` seconds) before sending — if they're off by more than ~10%, the preview is lying about speed and/or smoothness even when the underlying file is fine. This only affects the preview GIF; it never affects the delivered `.json`, but a janky preview understandably reads as "something's wrong with the animation" if not caught.
+
 ## Scope/limits
 Well-suited to icon-style UI animations: strokes, fills, simple shape morphs, particle bursts, fades, scales. Much harder for organic motion, gradients, masks/mattes, or raster/photographic content — Lottie only expresses vector shape animation.
 
