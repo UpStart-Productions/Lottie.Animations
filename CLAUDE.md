@@ -55,6 +55,7 @@ Well-suited to icon-style UI animations: strokes, fills, simple shape morphs, pa
 
 ## Delivered so far
 - **`animations/checkmark-burst/`** — full recreation pipeline, 4 review rounds, both keyframe pitfalls hit and fixed along the way.
-- **`animations/heart-burst/`** — Step 0 shortcut, one pass, no rebuild needed.
+- **`animations/heart-burst/`** — Step 0 shortcut, one pass, background layer stripped for transparency.
+- **`animations/celebration-burst/`** — Step 0 shortcut, one pass, no cleanup even needed (no background layer to begin with).
 
 See each animation's `NOTES.md` for specifics.
