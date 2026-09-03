@@ -50,6 +50,10 @@ Both pitfalls are covered by verification step 9 above (render a late hold frame
 - Literal measured timing from the source often reads as too fast/mechanical once rebuilt — default to ~20-25% slower than the raw measured durations for anything with visible motion (holds can stay at measured length).
 - Double check any off-center compound shape (e.g. a checkmark inside a circle) against the true geometric center before calling it done — asymmetric shapes read as off-center more easily than expected.
 
+## Preview GIF standard: white background
+
+The delivered `preview.gif` for every animation renders on a solid white page background (`body{background:#fff}`), never a transparency checkerboard — checkerboard is a debugging aid, not a delivery format. Use it only for a one-off verification screenshot when checking that a background layer was actually removed (see Step 0, item 7); rebuild the actual `preview.gif` on white before it goes in `animations/<name>/`. This applies regardless of whether the underlying `.json` itself is transparent — transparency lives in the file's layers, not in how the preview happens to be rendered.
+
 ## Preview GIF pitfall: under-sampling makes a fine file look janky
 The `celebration-burst` GIF preview looked choppy on first delivery — like it was running at ~5fps — even though the delivered `.json` was the untouched original, correctly authored at its real frame rate (70fps). The cause was the preview capture, not the animation: sampling every 4th frame and then displaying each captured frame for a fixed 120ms threw away most of the motion for anything moving fast (confetti pieces spinning/streaming quickly), so consecutive preview frames showed large jumps instead of smooth motion.
 
